@@ -5,14 +5,14 @@ A simple local ELT (Extract, Load, Transform) pipeline built with modern data to
 
 * **Package Manager**: uv (Python)
 * **Ingestion**: dlt
-* **Transformation**: dbt
+* **Transformation**: dbt core
 * **OLAP Database**: DuckDB
 * **Orchestration**: Prefect
 * **BI Tool**: Visivo
 
-## Quick Start
+## 1. Quick Start
 
-### Setup
+### 1.1 Setup
 
 ```bash
 # Install dependencies
@@ -22,7 +22,7 @@ uv sync
 uv sync --extra dev
 ```
 
-### Configuration
+### 1.2 Configuration
 
 Edit `src/cfg/config.py` to configure companies and start date:
 
@@ -31,7 +31,7 @@ START_DATE = "2024-01-01"
 COMPANIES = ["jpmorgan", "bank of america"]
 ```
 
-### Run the Pipeline
+### 1.3 Run the Pipeline
 
 ```bash
 # Run incremental pipeline (first run loads from START_DATE to today)
@@ -41,7 +41,7 @@ uv run python run_prefect_flow.py
 uv run python run_prefect_flow.py --reset-state
 ```
 
-### Access Prefect UI (Optional)
+### 1.4 Access Prefect UI (Optional)
 
 ```bash
 # Start Prefect server
@@ -50,7 +50,7 @@ uv run python run_prefect_flow.py --reset-state
 # Access UI at http://127.0.0.1:4200
 ```
 
-### Access DuckDB UI
+### 1.5 Access DuckDB UI
 
 First, install the DuckDB CLI:
 
@@ -69,68 +69,50 @@ duckdb -ui
 
 Additional docs: [DuckDB UI Documentation](https://duckdb.org/docs/api/cli/ui)
 
-This will open the DuckDB UI where you can access the `database/cfpb_complaints.duckdb` file.
+### 1.6 Access Visivo Dashboards
 
-## Project Structure
-
-```text
-src/
-  ├── __init__.py
-  ├── apis/
-  │   ├── __init__.py
-  │   └── cfpb_api_client.py
-  ├── cfg/
-  │   ├── __init__.py
-  │   └── config.py
-  ├── pipelines/
-  │   ├── __init__.py
-  │   └── cfpb_complaints_pipeline.py
-  ├── utils/
-  │   ├── __init__.py
-  │   └── state.py
-  └── orchestration/
-      ├── __init__.py
-      └── cfpb_flows.py
-```
-
-## Key Components
-
-* **apis/**: API client for CFPB Consumer Complaint Database
-* **cfg/**: Configuration settings (start date, companies list)
-* **pipelines/**: dlt pipeline definitions for data extraction and loading
-* **utils/**: Utility functions for state management
-* **orchestration/**: Prefect flows that orchestrate the pipeline
-
-## How It Works
-
-### Incremental Loading
-
-1. **First run**: Loads data from `START_DATE` to today
-2. **Subsequent runs**: Only loads new days (incremental)
-3. **State tracking**: Saves last loaded date to `pipeline_state.json`
-4. **Automatic**: Determines date range automatically
-
-### Data Flow
-
-```text
-CFPB API → dlt Pipeline → DuckDB (raw schema)
-                ↓
-         Prefect Orchestration
-                ↓
-         State Management
-```
-
-## Documentation
-
-* [README_INGESTION.md](README_INGESTION.md) - Complete ingestion pipeline documentation
-
-## Testing
+Start the Visivo web server to view interactive dashboards:
 
 ```bash
-# Run tests
+# Navigate to visivo directory
+cd visivo
+
+# Start web server (runs on http://localhost:8080 by default)
+uv run visivo serve
+
+# Or use a custom port
+uv run visivo serve --port 3000
+```
+
+Then open your browser to:
+
+* **Dashboard URL**: <http://localhost:8080>
+
+**Available Dashboards**:
+
+* **Executive Dashboard**: High-level overview of complaint trends and company performance
+* **Geographic Dashboard**: State-by-state complaint distribution and analysis
+
+**Note**: Before viewing dashboards, ensure:
+
+1. Data pipeline has been run (`uv run python run_prefect_flow.py`)
+2. dbt models have been built (`cd duckdb_dbt && dbt run`)
+
+Additional docs: [Visivo Documentation](docs/README_VISIVO.MD)
+
+## 2. Testing
+
+```bash
+# Run python tests
 uv run pytest tests/
 ```
 
-## License
+```bash
+# Run dbt tests
+cd duckdb_dbt
+dbt test
+```
+
+## 3. License
 
 See [LICENSE](LICENSE) file for details.
