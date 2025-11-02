@@ -1,13 +1,13 @@
 # local_elt_pipeline
 
-Simple local ELT pipeline with
+A simple local ELT (Extract, Load, Transform) pipeline built with modern data tools:
 
-* dependencies management: uv
-* ingestion: dlt
-* transformation: dbt
-* OLAP db: duckdb
-* Orchestration: Prefect
-* BI tool: Evidence (BI as code)
+* **Package Manager**: uv (Python)
+* **Ingestion**: dlt
+* **Transformation**: dbt
+* **OLAP Database**: DuckDB
+* **Orchestration**: Prefect
+* **BI Tool**: Streamlit
 
 ## Quick Start
 
@@ -49,13 +49,24 @@ uv run python run_prefect_flow.py --reset-state
 # Access UI at http://127.0.0.1:4200
 ```
 
-### Access DuckDB UI and adding the database
+### Access DuckDB UI
+
+First, install the DuckDB CLI:
 
 ```bash
-duckdb -ui 
+# macOS (using Homebrew)
+brew install duckdb
+
+# Or download from https://duckdb.org/docs/installation/
 ```
 
-This will spin up the DuckDB's UI, where you can access the `database/cfpb_complaints.duckdb`. Wh
+Then launch the DuckDB UI:
+
+```bash
+duckdb -ui
+```
+
+This will open the DuckDB UI where you can access the `database/cfpb_complaints.duckdb` file.
 
 ## Project Structure
 
