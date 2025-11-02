@@ -66,6 +66,8 @@ Then launch the DuckDB UI:
 duckdb -ui
 ```
 
+Additional docs: [DuckDB UI Documentation](https://duckdb.org/docs/api/cli/ui)
+
 This will open the DuckDB UI where you can access the `database/cfpb_complaints.duckdb` file.
 
 ## Project Structure
