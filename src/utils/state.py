@@ -58,7 +58,9 @@ def reset_state() -> None:
     """Reset the state file (for manual re-initialization)."""
     if STATE_FILE.exists():
         STATE_FILE.unlink()
-        logger.info("State file reset")
+        logger.info("State file deleted")
+    else:
+        logger.info("State file does not exist (already reset or never initialized)")
 
 
 def get_next_load_date(start_date: str) -> tuple[str, str]:

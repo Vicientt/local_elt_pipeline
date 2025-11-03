@@ -257,7 +257,7 @@ def cfpb_complaints_incremental_flow(
         logger.info("Running dbt transformations...")
         dbt_result = run_dbt_models_task()
 
-        if dbt_result.get("status") == "success":
+        if dbt_result and dbt_result.get("status") == "success":
             logger.info("dbt models ran successfully, running tests...")
             dbt_test_result = run_dbt_tests_task()
         else:

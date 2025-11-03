@@ -66,7 +66,9 @@ def main():
     if args.reset_state:
         from src.utils.state import reset_state
 
+        print("Resetting pipeline state...", flush=True)
         reset_state()
+        print("State reset. Next run will perform initial load.", flush=True)
         logger.info("State reset. Next run will perform initial load.")
         return 0
 
@@ -74,14 +76,25 @@ def main():
         logger.info("Starting ELT pipeline: Extract & Load → Transform (dbt) → Test")
         result = cfpb_complaints_incremental_flow(database_path=args.database)
 
+        if result is None:
+            logger.error("Flow returned None - this should not happen")
+            return 1
+
         logger.info("Flow completed successfully")
         logger.info(f"Summary: {result}")
 
+        # Handle skipped flows (no new data to load)
+        if result.get("status") == "skipped":
+            logger.info(f"Flow skipped: {result.get('message', 'No new data')}")
+            return 0
+
         # Check if dbt transformations succeeded
-        dbt_status = result.get("dbt_run", {}).get("status")
-        if dbt_status == "failed":
-            logger.warning("dbt transformations failed - check logs above")
-            return 1
+        dbt_run = result.get("dbt_run")
+        if dbt_run:
+            dbt_status = dbt_run.get("status")
+            if dbt_status == "failed":
+                logger.warning("dbt transformations failed - check logs above")
+                return 1
 
         return 0
 
