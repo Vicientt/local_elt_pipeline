@@ -60,6 +60,11 @@ quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
 
+[dependency-groups]
+dev = [
+    "jupyterlab>=4.5.0",
+]
+
 [tool.ruff.lint.isort]
 known-first-party = ["src"]
 
