@@ -14,18 +14,18 @@ def apply_custom_styling():
     css = """
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
-        
+
         html, body, [class*="st-"] {
             font-family: 'Quicksand', sans-serif;
-            color: #f0f0f0; 
+            color: #f0f0f0;
         }
-        
+
         /* Gradient Background */
         .stApp {
             background-image: linear-gradient(to bottom, #2c3e50, #000000);
             background-attachment: fixed;
         }
-        
+
         /* Glassmorphism Cards */
         [data-testid="stVerticalBlockBorderWrapper"] > div {
             background-color: rgba(255, 255, 255, 0.05);
@@ -38,7 +38,7 @@ def apply_custom_styling():
         .stSelectbox, .stTextInput {
             color: #ffffff;
         }
-        
+
         /* Button */
         .stButton > button {
             background: linear-gradient(90deg, #ff8a00, #e52e71);
