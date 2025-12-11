@@ -14,6 +14,5 @@ COMPANIES = [
     "pnc",
     "truist",
     "capital one",
-    "state street"
+    "state street",
 ]
-
